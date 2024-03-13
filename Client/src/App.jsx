@@ -1,17 +1,20 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import Navbar from './Components/Navbar'
 import Sidebar from './Components/Sidebar'
 import Body from './Components/Body'
 
 const App = () => {
+  
+  
+ 
   return (
-    <div>
+    <div> 
       <Navbar />
       <div className='flex'>
-      <Sidebar />
-      <Body />
+        <Sidebar  /> 
+        <Body  /> 
+      </div >
       </div>
-    </div>
   )
 }
 

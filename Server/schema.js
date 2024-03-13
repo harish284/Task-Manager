@@ -10,7 +10,7 @@ const taskmanagerschema = new mongoose.Schema
             type: String,
         },
         duedate:{
-            type: Date,
+            type: String,
         },
         category:{
             type: String,

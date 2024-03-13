@@ -23,6 +23,7 @@ async function connecttodb(){
     }
     catch(error){
         console.log("cannot connect to database");
+        console.log(error)
     }
 }
 connecttodb();
@@ -37,10 +38,10 @@ app.post('/taskmanager-create',async function(req,res){
             duedate:req.body.duedate,
             category:req.body.category,
         })
-        res.status(200).send('task created successfully');
+        res.status(200).json({status : "success" , message : "Task created successfully"});
     }
     catch(error){
-        res.status(400).send('cannot create task');
+        res.status(400).json({status : "failed" , message : "cannot create task"});
     }
 })
 
@@ -48,10 +49,10 @@ app.post('/taskmanager-create',async function(req,res){
 app.get('/taskmanager-get',async function(req,res){
     try{
         const taskdetails = await taskmanagermodel.find();
-        res.status(200).send(taskdetails);
+        res.status(200).json(taskdetails);
     }
     catch(error){
-        res.status(500).send('cannot get task');
+        res.status(500).json({status : "failed" , message : "cannot get task"});
     }
 })
 
@@ -59,10 +60,10 @@ app.get('/taskmanager-get',async function(req,res){
 app.patch('/taskmanager-update/:id',async function(req,res){
     try{
         const taskmanager = await taskmanagermodel.findByIdAndUpdate(req.params.id,req.body);
-        res.status(200).send('task updated successfully');
+        res.status(200).json({status : "success" , message : "Task updated successfully"}) ;
     }
     catch(err){
-        res.status(500).send('cannot update task');
+        res.status(500).json({status : "failed" , message : "cannot update task"});
     }
 })
 
@@ -71,10 +72,10 @@ app.delete('/taskmanager-delete/:_id',async function(req,res){
     try{
         const id = req.params._id;
         const deleted = await taskmanagermodel.findByIdAndDelete(id);
-        res.status(200).send('task deleted successfully');
+        res.status(200).json({status : "success" , message : "Task deleted successfully"});
     }
     catch(err){
-        res.status(500).send('cannot delete task');
+        res.status(500).json({status : "failed" , message : "cannot delete task"});
     }
 })
 
