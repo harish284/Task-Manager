@@ -13,7 +13,7 @@ app.use(cors());
 
 async function connecttodb(){
     try{
-        const url = 'mongodb+srv://vijay2304a:123@cluster0.99eceu8.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0'
+        const url = ('mongodb+srv://vijay2304a:123@cluster0.99eceu8.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0')
         await mongoose.connect(url)
         console.log('connected to database successfully');
         const port = process.env.PORT || 3000;
