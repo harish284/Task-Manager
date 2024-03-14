@@ -3,15 +3,10 @@ import Materialicon from 'material-icons-react'
 
 const Card = (props) => {
     const {id,setupdate,update} = props
-    const[title,settitle] = useState('')
-    const[description,setdescription] = useState('')
-    const[duedate,setduedate] = useState('')
-    const[category,setcategory] = useState('')
     const[deletecount,setdeletecount] = useState(0)
    
 
     const Delete=(e)=>{
-        e.preventDefault();
         console.log(id);
         handledone(id);
     };

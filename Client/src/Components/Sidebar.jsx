@@ -1,5 +1,4 @@
 import React from 'react'
-import Materialicon from 'material-icons-react'
 import {useState, useEffect} from 'react'
 
 const Sidebar = ({setupdate}) => {
@@ -12,7 +11,6 @@ const Sidebar = ({setupdate}) => {
     let count=0;
     //ADD
     const add = (e) => {
-        
         fetch('http://localhost:3000/taskmanager-create',{
             method:'POST',
             headers:{
