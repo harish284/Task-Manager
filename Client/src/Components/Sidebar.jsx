@@ -2,17 +2,17 @@ import React from 'react'
 import Materialicon from 'material-icons-react'
 import {useState, useEffect} from 'react'
 
-const Sidebar = () => {
+const Sidebar = ({setupdate}) => {
     const[title,settitle] = useState('')
     const[description,setdescription] = useState('')
     const[duedate,setduedate] = useState('')
     const[category,setcategory] = useState('')
-    const[update,setupdate] = useState(true)
+   
 
     let count=0;
     //ADD
     const add = (e) => {
-        e.preventDefault();
+        
         fetch('http://localhost:3000/taskmanager-create',{
             method:'POST',
             headers:{
@@ -34,11 +34,11 @@ const Sidebar = () => {
     
   return (
     <div className='w-[600px] h-screen bg-slate-200 rounded-r-lg flex flex-col items-center font-title'>
-        <div className='text-3xl p-4 mt-8 flex font-semibold gap-2'>
+        <div className='text-xl gap-2 flex font-semibold'>
             <h1 className='text-violet-900 '>Add </h1>
             <span><h1 className='text-yellow-500'> Task</h1></span>
         </div>
-    <div className='flex flex-col gap-8 text-2xl'>
+    <div className='flex flex-col gap-4 text-xl'>
         <div>
             <h1>Title</h1>
             <input type="text" placeholder='Enter your Task' className='p-1 text-xl rounded-lg' onChange={(e)=>settitle(e.target.value)}/>

@@ -3,9 +3,8 @@ import Materialicon from 'material-icons-react'
 import Card from './Card'
 
 const Body = (props) => {
-    const {deletecount,setdeletecount} = useState(0)
+    
     const [list, setList] = useState([])
-    const [update, setUpdate] = useState(false)
     const [count, setCount] = useState(0)
   
 
@@ -19,7 +18,7 @@ const Body = (props) => {
             setCount(data.length)
             console.log(count);
         console.log(data)})
-    },[update])
+    },[props.update])
 
    
     
@@ -64,7 +63,7 @@ const Body = (props) => {
         </div>
         <div>
         {list.map((task)=>(
-        <Card keys={task.id} id={task._id} title={task.title} description={task.description} duedate={task.duedate} category={task.category} count={count}/>
+        <Card keys={task.id} id={task._id} title={task.title} description={task.description} duedate={task.duedate} category={task.category} count={count} setupdate={props.setupdate} />
       ))}
         </div>
         </div>

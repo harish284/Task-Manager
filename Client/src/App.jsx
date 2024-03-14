@@ -6,13 +6,14 @@ import Body from './Components/Body'
 const App = () => {
   
   
+  const[update,setupdate] = useState(false)
  
   return (
     <div> 
       <Navbar />
       <div className='flex'>
-        <Sidebar  /> 
-        <Body  /> 
+      <Sidebar setupdate={setupdate} /> 
+        <Body  update={update} setupdate={setupdate}/> 
       </div >
       </div>
   )

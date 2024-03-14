@@ -1,14 +1,12 @@
 import React,{useState} from 'react'
 import Materialicon from 'material-icons-react'
-import Body from './Body'
 
 const Card = (props) => {
-    const {id} = props
+    const {id,setupdate,update} = props
     const[title,settitle] = useState('')
     const[description,setdescription] = useState('')
     const[duedate,setduedate] = useState('')
     const[category,setcategory] = useState('')
-    const[update,setupdate] = useState(true)
     const[deletecount,setdeletecount] = useState(0)
    
 
@@ -24,7 +22,7 @@ const Card = (props) => {
             method:'DELETE',
         }).then(res => res.json())
         .then(data => {
-            setupdate((prev) => !prev)
+            props.setupdate((prev) => !prev)
            setdeletecount(data.count);  
             console.log(deletecount);
             console.log(data);
