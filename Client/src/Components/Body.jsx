@@ -11,7 +11,7 @@ const Body = (props) => {
     
 
     useEffect(() => {
-        fetch('http://localhost:3000/taskmanager-get')
+        fetch('https://task-manager-1imi.onrender.com/taskmanager-get')
         .then(res => res.json())
         .then(data => {
             setList(data)

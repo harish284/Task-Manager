@@ -23,7 +23,7 @@ const Sidebar = ({setupdate}) => {
     let count=0;
     //ADD
     const add = (e) => {
-        fetch('http://localhost:3000/taskmanager-create',{
+        fetch('https://task-manager-1imi.onrender.com/taskmanager-create',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

@@ -13,7 +13,7 @@ const Card = (props) => {
 
 
     const handledone = (id) => {
-        fetch(`http://localhost:3000/taskmanager-delete/${id}`,{
+        fetch(`https://task-manager-1imi.onrender.com/taskmanager-delete/${id}`,{
             method:'DELETE',
         }).then(res => res.json())
         .then(data => {
