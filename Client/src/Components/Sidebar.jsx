@@ -6,6 +6,18 @@ const Sidebar = ({setupdate}) => {
     const[description,setdescription] = useState('')
     const[duedate,setduedate] = useState('')
     const[category,setcategory] = useState('')
+
+    const handleDateChange = (e) => {
+        const selectedDate = e.target.value;
+        const currentDate = new Date();
+
+        if(selectedDate < currentDate.toISOString().split('T')[0]){
+            alert('Please select a valid date');
+            setduedate('');
+        }else{
+            setduedate(selectedDate);
+        }
+    }
    
 
     let count=0;
@@ -24,10 +36,19 @@ const Sidebar = ({setupdate}) => {
             })
         }).then((res) => res.json())
         .then(data => {
-        setupdate((prev)=>!prev)
-        console.log(data);
-    })
-}
+            console.log("Data received:", data); 
+                console.log("Before reset:", { title, description, duedate, category }); 
+                settitle('');
+                setdescription('');
+                setduedate('');
+                setcategory('');
+                setupdate(prev => !prev);
+                console.log("After reset:", { title, description, duedate, category }); 
+            })
+            .catch(error => {
+                console.error("Error:", error); 
+            });
+    }   
 
     
   return (
@@ -47,7 +68,7 @@ const Sidebar = ({setupdate}) => {
         </div>
         <div>
             <h1>Date</h1>
-            <input type="date" className='text-xl p-1 rounded-lg' onChange={(d)=> setduedate(d.target.value)}/>
+            <input type="date" className='text-xl p-1 rounded-lg' onChange={handleDateChange}/>
         </div>
         <div>
             <h1>Category</h1>

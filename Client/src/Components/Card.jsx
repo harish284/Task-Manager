@@ -31,15 +31,17 @@ const Card = (props) => {
     <div className='w-full bg-slate-300 my-6'>
          <div className={`flex justify-between p-6 font-title rounded-lg font-semibold ${props.category === 'High' ? 'bg-red-600  text-yellow-400'  : 'bg-green-600 text-violet-900'}`}>
                 <div>
-                    <h1>{props.title}</h1>
+                    <div>
+                        <h1 className=''>{props.title}</h1>
+                    </div>
+                    <div>
+                        <h1>{props.description}</h1>
+                    </div>
+                    <div>
+                        <h1>{props.duedate}</h1>
+                    </div>
                 </div>
-                <div>
-                    <h1>{props.description}</h1>
-                </div>
-                <div>
-                    <h1>{props.duedate}</h1>
-                </div>
-                <div>
+                <div className='flex items-center'>
                    <button onClick={Delete}> <Materialicon icon="done" color="green" size={24}></Materialicon></button>
                 </div>
             </div>
