@@ -22,10 +22,10 @@ Task Manager is a simple MERN STACK application to manage your tasks efficiently
     cd task-manager
     ```
 
-3. Run the Python script:
+3. Run the website:
 
     ```bash
-    python task_manager.py
+    npm run build
     ```
 
 ## Usage
