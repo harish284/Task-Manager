@@ -28,8 +28,5 @@ Task Manager is a simple MERN STACK application to manage your tasks efficiently
     npm run build
     ```
 
-## Usage
 
-- **Adding a Task:** To add a task, use the `add_task()` method with the task name as the argument.
-  
 
