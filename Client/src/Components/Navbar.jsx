@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Materialicon from 'material-icons-react'
 import logo from '../assets/images/LOGO.png'
 
 const Navbar = () => {
   return (
-    <div className='flex justify-between items-center p-2 bg-slate-200 rounded-lg text-xl font-title shadow-lg'>
+    <div className='w-full flex justify-between items-center p-2 bg-slate-200 rounded-lg text-xl font-title shadow-lg'>
         <div>
           <img src={logo} alt="" className='w-10 h-10'/>
         </div>
@@ -13,11 +14,8 @@ const Navbar = () => {
             <span><h1 className='text-violet-900'>MANAGER</h1></span>
         </div>
         <div className='flex relative items-center gap-4'>
-          <input type="text" placeholder='quick find' className='p-2 rounded-lg w-[150px]' />
-          <Materialicon icon="search" color='black' size={24}  />
-          <Materialicon icon="add" color='black' size={24} />
-          <Materialicon icon="notifications" color='black' size={24} />
-          <Materialicon icon="person" color='black' size={24} />
+          <Link to="/SignUp"><Materialicon icon="person" color='black' size={24} /></Link>
+          <Link to="/Login"><Materialicon icon="login" color='black' size={24} /></Link>
         </div>
     </div>
   )

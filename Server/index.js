@@ -2,15 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
 const {taskmanagermodel} = require('./schema');
+const verifytoken = require('./Middleware/verifytoken'); 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
 //connect to mongodb
-
 async function connecttodb(){
     try{
         const url = ('mongodb+srv://vijay2304a:123@cluster0.99eceu8.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0')
@@ -28,8 +27,10 @@ async function connecttodb(){
 }
 connecttodb();
 
-//CREATE 
+//Route
+require('./Routes/userroute')(app);
 
+//CREATE 
 app.post('/taskmanager-create',async function(req,res){
     try{
         await taskmanagermodel.create({
@@ -46,7 +47,7 @@ app.post('/taskmanager-create',async function(req,res){
 })
 
 //READ
-app.get('/taskmanager-get',async function(req,res){
+app.get('/taskmanager-get',verifytoken,async function(req,res){
     try{
         const taskdetails = await taskmanagermodel.find();
         res.status(200).json(taskdetails);

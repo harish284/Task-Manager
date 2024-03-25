@@ -1,5 +1,6 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
+import { Link } from 'react-router-dom'
 
 const Sidebar = ({setupdate}) => {
     const[title,settitle] = useState('')
@@ -80,7 +81,7 @@ const Sidebar = ({setupdate}) => {
         </div>
         <div className='flex items-center'>
             <div className='flex justify-center items-center'>
-                <button className='bg-yellow-500 p-1 rounded-3xl' onClick={add}>+ Add Task</button>
+                <Link to="/Body"><button className='bg-yellow-500 p-1 rounded-3xl' onClick={add}>Add Task</button></Link>
             </div>
         </div>
         </div>

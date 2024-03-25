@@ -1,22 +1,17 @@
 import React,{useState, useEffect} from 'react'
-import Navbar from './Components/Navbar'
-import Sidebar from './Components/Sidebar'
-import Body from './Components/Body'
+import { Outlet } from 'react-router-dom'
+import Home from './Components/Home'
+import {Route, Routes,Navigate} from 'react-router-dom'
+
 
 const App = () => {
-  
-  
-  const[update,setupdate] = useState(false)
+  const user = localStorage.getItem('token')
  
   return (
-    <div> 
-      <Navbar />
-      <div className='flex'>
-      <Sidebar setupdate={setupdate} /> 
-        <Body  update={update} setupdate={setupdate}/> 
-      </div >
-      </div>
+    <> 
+      <Home /> 
+      <Outlet />  
+    </>
   )
 }
-
 export default App
