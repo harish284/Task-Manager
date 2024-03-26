@@ -2,7 +2,6 @@ import React,{useEffect,useState} from 'react'
 import Materialicon from 'material-icons-react'
 import Card from './Card'
 import Navbody from './Navbody'
-import { Link } from 'react-router-dom'
 
 const Body = (props) => {
     const [update, setupdate] = useState(false)
