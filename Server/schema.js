@@ -15,14 +15,9 @@ const taskmanagerschema = new mongoose.Schema
         category:{
             type: String,
         },
-        username : {
-            type: String,
-        },
-        email : {
-            type: String,
-        },
-        password : {
-            type: String,
+        userId:{
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'user'
         }
     }
 )

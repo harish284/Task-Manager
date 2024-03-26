@@ -5,12 +5,12 @@ const SignUp = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const[isValidEmailFormat, setIsValidEmailFormat] = useState(false);
+    // const[isValidEmailFormat, setIsValidEmailFormat] = useState(false);
 
-    const isValidemail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
+    // const isValidemail = (email) => {
+    //     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return re.test(email);
+    // }
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -26,7 +26,7 @@ const SignUp = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, email, password })
+                body: JSON.stringify({ username:name, email, password })
             });
             const data = await response.json();
             console.log("Data received:", data);

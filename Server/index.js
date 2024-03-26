@@ -5,6 +5,7 @@ const cors = require('cors');
 const {taskmanagermodel} = require('./schema');
 const verifytoken = require('./Middleware/verifytoken'); 
 
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -38,8 +39,10 @@ app.post('/taskmanager-create',async function(req,res){
             description:req.body.description,
             duedate:req.body.duedate,
             category:req.body.category,
+            userId:req.body.userId
         })
         res.status(200).json({status : "success" , message : "Task created successfully"});
+        console.log(userId);
     }
     catch(error){
         res.status(400).json({status : "failed" , message : "cannot create task"});

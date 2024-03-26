@@ -15,5 +15,5 @@ const userSchema = new mongoose.Schema({
         required: true,
     }
 });
-const loginmodel = mongoose.model('taskmanager', userSchema);
-module.exports = {loginmodel}
+const LoginModel = mongoose.model('taskmanager', userSchema);
+module.exports = {LoginModel}

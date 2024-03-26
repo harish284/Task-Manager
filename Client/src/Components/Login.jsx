@@ -17,8 +17,8 @@ const Login = () => {
                 body: JSON.stringify({ email, password }),
             });
             if (response.ok) {
-                const token = await response.text(); 
-                localStorage.setItem('token', token); 
+                const res = await response.json(); 
+                localStorage.setItem('token', res.accessToken); 
                 window.location = '/Body'; 
             } else {
                 setError('Invalid email or password'); 
