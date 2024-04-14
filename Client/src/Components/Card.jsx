@@ -5,15 +5,13 @@ const Card = (props) => {
     const {id,setupdate,update} = props
     const[deletecount,setdeletecount] = useState(0)
     
-   
-
+    //DELETE REQUEST
     const Delete=(e)=>{
         console.log(id);
         handledone(id);
         setdeletecount(deletecount+1);
         console.log(deletecount);
     };
-
 
     const handledone = (id) => {
         fetch(`https://task-manager-1imi.onrender.com/taskmanager-delete/${id}`,{

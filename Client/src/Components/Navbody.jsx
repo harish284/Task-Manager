@@ -14,7 +14,7 @@ const Navbody = () => {
             <span><h1 className='text-violet-900'>MANAGER</h1></span>
         </div>
         <div className='flex relative items-center gap-4'>
-          <Link to="/Sidebar"><Materialicon icon="add" color='black' size={24} /></Link>
+          <Materialicon icon="add" color='black' size={24} />
           <Materialicon icon="notifications" color='black' size={24} />
           <Link to="/Home"><Materialicon icon="logout" color='black' size={24} /></Link>
         </div>

@@ -5,10 +5,10 @@ import Home from './Components/Home'
 
 const App = () => {
  
-  return (
+  return ( 
     <> 
-      <Home /> 
-      <Outlet />  
+    <Home /> 
+      <Outlet /> 
     </>
   )
 }

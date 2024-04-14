@@ -2,10 +2,12 @@ import React,{useEffect,useState} from 'react'
 import Materialicon from 'material-icons-react'
 import Card from './Card'
 import Navbody from './Navbody'
+import {Link} from 'react-router-dom'
 
 const Body = (props) => {
     const [update, setupdate] = useState(false)
     const [list, setList] = useState([])
+    const[Count,setCount] = useState(0)
 
     useEffect(() => {
         fetch('https://task-manager-1imi.onrender.com/taskmanager-get')
@@ -141,7 +143,7 @@ const Body = (props) => {
                     <h1 className='text-3xl font-title text-black mt-8 ml-8'>My Tasks</h1>
                 <div className='flex justify-start gap-8 text-black text-xl mt-4'>
                     <div>
-                        <h1>In Progress</h1>
+                        <button>In Progress</button>
                     </div>
                     <div>
                         <button>Completed</button>
@@ -153,7 +155,7 @@ const Body = (props) => {
         </div>
         <div>
             {list.map((task)=>(
-            <Card keys={task.id} id={task._id} title={task.title} description={task.description} duedate={task.duedate} category={task.category} count={count} setupdate={props.setupdate} />
+            <Card keys={task.id} id={task._id} title={task.title} description={task.description} duedate={task.duedate} category={task.category} count={count} setupdate={setupdate} />
              ))}
         </div>
     </div>
