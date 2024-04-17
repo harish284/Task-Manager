@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {taskmanagermodel} = require('./schema');
-const verifytoken = require('./Middleware/verifytoken'); 
-
 
 const app = express();
 app.use(bodyParser.json());
