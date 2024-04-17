@@ -48,7 +48,7 @@ app.post('/taskmanager-create',async function(req,res){
 })
 
 //READ
-app.get('/taskmanager-get',verifytoken,async function(req,res){
+app.get('/taskmanager-get',async function(req,res){
     try{
         const taskdetails = await taskmanagermodel.find();
         res.status(200).json(taskdetails);
