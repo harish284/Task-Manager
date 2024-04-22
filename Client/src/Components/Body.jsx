@@ -2,7 +2,6 @@ import React,{useEffect,useState} from 'react'
 import Materialicon from 'material-icons-react'
 import Card from './Card'
 import Navbody from './Navbody'
-import {Link} from 'react-router-dom'
 
 const Body = (props) => {
     const [update, setupdate] = useState(false)
@@ -10,7 +9,7 @@ const Body = (props) => {
     const[Count,setCount] = useState(0)
 
     useEffect(() => {
-        fetch('https://task-manager-1imi.onrender.com/taskmanager-get')
+        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-get`)
         .then(res => res.json())
         .then(data => {
             const sortedtask = data.sort((a,b) => new Date(a.duedate) - new Date(b.duedate))
@@ -40,7 +39,7 @@ const Body = (props) => {
     let count=0;
     //ADD
     const add = (e) => {
-        fetch('https://task-manager-1imi.onrender.com/taskmanager-create',{
+        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-create`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
