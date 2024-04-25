@@ -5,7 +5,7 @@ Task Manager is a simple MERN STACK application to manage your tasks efficiently
 ## Features
 
 - Add tasks
-- Remove tasks
+- Remove tasks.
 - Display tasks
 
 ## Getting Started
