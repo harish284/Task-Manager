@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -19,7 +21,8 @@ const Login = () => {
             if (response.ok) {
                 const res = await response.json(); 
                 localStorage.setItem('token', res.accessToken); 
-                window.location = '/Body'; 
+                // window.location = '/Body'; 
+                navigate("/Body");
             } else {
                 setError('Invalid email or password'); 
             }

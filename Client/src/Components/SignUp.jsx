@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import {jwtDecode} from 'jwt-decode';
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,7 +23,8 @@ const SignUp = () => {
             });
             const data = await response.json();
             console.log("Data received:", data);
-            window.location = '/Body';
+            // window.location = '/Body';
+            navigate("/Body");
         } catch (error) {
             console.error("Error:", error);
         }
