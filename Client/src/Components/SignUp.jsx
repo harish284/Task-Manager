@@ -24,7 +24,7 @@ const SignUp = () => {
             const data = await response.json();
             console.log("Data received:", data);
             // window.location = '/Body';
-            navigate("/Body");
+            navigate("/body");
         } catch (error) {
             console.error("Error:", error);
         }

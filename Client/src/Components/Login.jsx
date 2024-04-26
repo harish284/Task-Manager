@@ -22,7 +22,7 @@ const Login = () => {
                 const res = await response.json(); 
                 localStorage.setItem('token', res.accessToken); 
                 // window.location = '/Body'; 
-                navigate("/Body");
+                navigate("/body");
             } else {
                 setError('Invalid email or password'); 
             }
