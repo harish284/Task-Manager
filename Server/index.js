@@ -3,10 +3,18 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {taskmanagermodel} = require('./schema');
+const jwt = require('jsonwebtoken');
+const {LoginModel} = require('../Server/Model/usermodel');
+const bcrypt= require('bcrypt');
+const {authenticateToken} = require('../Server/Middleware');
+
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin : '*',
+}));
+
 
 //connect to mongodb
 async function connecttodb(){
@@ -26,8 +34,6 @@ async function connecttodb(){
 }
 connecttodb();
 
-//Route
-require('./Routes/userroute')(app);
 
 //CREATE 
 app.post('/taskmanager-create',async function(req,res){
@@ -37,8 +43,9 @@ app.post('/taskmanager-create',async function(req,res){
             description:req.body.description,
             duedate:req.body.duedate,
             category:req.body.category,
-            userId:req.body.userId
+            userId:user._id
         })
+        await taskmanagermodel.save();
         res.status(200).json({status : "success" , message : "Task created successfully"});
         console.log(userId);
     }
@@ -50,7 +57,7 @@ app.post('/taskmanager-create',async function(req,res){
 //READ
 app.get('/taskmanager-get',async function(req,res){
     try{
-        const taskdetails = await taskmanagermodel.find();
+        const taskdetails = await taskmanagermodel.find({userId:user._id});
         res.status(200).json(taskdetails);
     }
     catch(error){
@@ -81,5 +88,67 @@ app.delete('/taskmanager-delete/:_id',async function(req,res){
     }
 })
 
+//Create-Account
+
+app.post("/signup",async (req,res) => {
+    const { username, email, password } = req.body;
+
+    if(!username || !email || !password){
+        return res.status(400).send({ message: 'All fields are required' });
+    }
+
+    if(password.length < 6){
+        return res.status(400).send({ message: 'Password must be at least 6 characters' });
+    }
+
+    const isUser = LoginModel.findOne({ email:email });
+    if (isUser) {
+        return res.status(400).send({ message: 'User already exists' });
+    }
+
+    const newUser = new LoginModel({ 
+        username,
+        email,
+        password : bcrypt.hashSync(password, 10)
+    });
+    
+    await newUser.save();
+    const accessToken = jwt.sign({newUser}, 
+    process.env.ACCESS_TOKEN_SECRET,{expiresIn: '3600m'});
+    return res.status(200).send({ message: 'User created successfully', accessToken });
+});
 
 
+// login
+app.post("/login",async (req, res) => {
+    try {
+        if(!req.body.email || !req.body.password){
+            return res.status(400).send({ message: 'All fields are required' });
+        }
+        const {email, password} = req.body;
+        LoginModel.findOne({ email }).then((user) => {
+            if (!user) {
+                return res.status(404).send({ message: 'User not found' });
+            }
+
+            const validPassword = bcrypt.compareSync(password, user.password);
+
+            if (!validPassword) {
+                 res.status(401).send({ message: 'Invalid password' });
+            }
+           
+            let token = jwt.sign({ id: user._id}, "your_secret_key");
+        res.send({message: 'Login successful',
+            user:{
+                id: user._id,
+                username: user.username,
+                email: user.email
+            },
+            accessToken: token,
+        })
+        })
+        
+    } catch (error) {
+        res.status(500).json({ status: 'failed', message: 'Cannot login' });
+    }
+});
