@@ -6,7 +6,7 @@ const {taskmanagermodel} = require('./schema');
 const jwt = require('jsonwebtoken');
 const {LoginModel} = require('../Server/Model/usermodel');
 const bcrypt= require('bcrypt');
-const {authenticateToken} = require('../Server/Middleware');
+const verifyToken = require('../Server/Middleware');
 
 
 const app = express();
@@ -39,15 +39,12 @@ connecttodb();
 app.post('/taskmanager-create',async function(req,res){
     try{
         await taskmanagermodel.create({
-            title:req.body.title,
-            description:req.body.description,
-            duedate:req.body.duedate,
-            category:req.body.category,
-            userId:user._id
+            "title" :req.body.title,
+            "description" :req.body.description,
+            "duedate" :req.body.duedate,
+            "category" :req.body.category
         })
-        await taskmanagermodel.save();
         res.status(200).json({status : "success" , message : "Task created successfully"});
-        console.log(userId);
     }
     catch(error){
         res.status(400).json({status : "failed" , message : "cannot create task"});
@@ -57,7 +54,7 @@ app.post('/taskmanager-create',async function(req,res){
 //READ
 app.get('/taskmanager-get',async function(req,res){
     try{
-        const taskdetails = await taskmanagermodel.find({userId:user._id});
+        const taskdetails = await taskmanagermodel.find();
         res.status(200).json(taskdetails);
     }
     catch(error){
@@ -65,22 +62,12 @@ app.get('/taskmanager-get',async function(req,res){
     }
 })
 
-//UPDATE
-app.patch('/taskmanager-update/:id',async function(req,res){
-    try{
-        const taskmanager = await taskmanagermodel.findByIdAndUpdate(req.params.id,req.body);
-        res.status(200).json({status : "success" , message : "Task updated successfully"}) ;
-    }
-    catch(err){
-        res.status(500).json({status : "failed" , message : "cannot update task"});
-    }
-})
 
 //DELETE
 app.delete('/taskmanager-delete/:_id',async function(req,res){
+    const id = req.params._id;
     try{
-        const id = req.params._id;
-        const deleted = await taskmanagermodel.findByIdAndDelete(id);
+         await taskmanagermodel.findOne({_id: id});
         res.status(200).json({status : "success" , message : "Task deleted successfully"});
     }
     catch(err){
@@ -90,7 +77,7 @@ app.delete('/taskmanager-delete/:_id',async function(req,res){
 
 //Create-Account
 
-app.post("/signup",async (req,res) => {
+app.post("/signup",verifyToken,async (req,res) => {
     const { username, email, password } = req.body;
 
     if(!username || !email || !password){
@@ -101,21 +88,22 @@ app.post("/signup",async (req,res) => {
         return res.status(400).send({ message: 'Password must be at least 6 characters' });
     }
 
-    const isUser = LoginModel.findOne({ email:email });
-    if (isUser) {
-        return res.status(400).send({ message: 'User already exists' });
-    }
-
     const newUser = new LoginModel({ 
         username,
         email,
-        password : bcrypt.hashSync(password, 10)
+        password : bcrypt.hashSync(password, 8)
     });
     
-    await newUser.save();
-    const accessToken = jwt.sign({newUser}, 
-    process.env.ACCESS_TOKEN_SECRET,{expiresIn: '3600m'});
-    return res.status(200).send({ message: 'User created successfully', accessToken });
+    LoginModel.findOne({email}).then((data)=>{
+        if(data){
+            return res.status(400).send({ message: 'User already exists' });
+        }
+        else{
+            newUser.save().then((user)=>{
+                res.send({message: 'User registered successfully'});
+            });
+        }
+    })
 });
 
 
@@ -138,11 +126,11 @@ app.post("/login",async (req, res) => {
             }
            
             let token = jwt.sign({ id: user._id}, "your_secret_key");
-        res.send({message: 'Login successful',
+            res.send({message: 'Login successful',
             user:{
-                id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                password: user.password
             },
             accessToken: token,
         })
@@ -152,3 +140,4 @@ app.post("/login",async (req, res) => {
         res.status(500).json({ status: 'failed', message: 'Cannot login' });
     }
 });
+
