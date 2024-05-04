@@ -23,7 +23,7 @@ const SignUp = () => {
             });
             const data = await response.json();
             console.log("Data received:", data);
-            // window.location = '/Body';
+            console.log("User created successfully");
             navigate("/body");
         } catch (error) {
             console.error("Error:", error);
@@ -53,7 +53,8 @@ const SignUp = () => {
                     <GoogleLogin onSuccess={(CredentialResponse)=> {
                         const decode = jwtDecode(CredentialResponse?.credential);
                         console.log(decode)
-                        window.location = '/Body';
+                        console.log("login success");
+                        navigate('/body');
                     }
                     } 
                         onError={()=>{

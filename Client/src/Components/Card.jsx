@@ -14,7 +14,7 @@ const Card = (props) => {
     };
 
     const handledone = (id) => {
-        fetch(`https://task-manager-1imi.onrender.com/taskmanager-delete/${id}`,{
+        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-delete/${id}`,{
             method:'DELETE',
         }).then(res => {
             if(res.ok){

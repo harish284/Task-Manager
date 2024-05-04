@@ -20,8 +20,8 @@ const Login = () => {
             });
             if (response.ok) {
                 const res = await response.json(); 
-                localStorage.setItem('token', res.accessToken); 
-                // window.location = '/Body'; 
+                localStorage.setItem('token', res.accessToken);  
+                console.log("welcome", res.message);
                 navigate("/body");
             } else {
                 setError('Invalid email or password'); 

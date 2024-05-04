@@ -9,7 +9,7 @@ const Body = (props) => {
     const[Count,setCount] = useState(0)
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-get`)
+         fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-get`)
         .then(res => res.json())
         .then(data => {
             const sortedtask = data.sort((a,b) => new Date(a.duedate) - new Date(b.duedate))
@@ -22,6 +22,7 @@ const Body = (props) => {
     const[description,setdescription] = useState('')
     const[duedate,setduedate] = useState('')
     const[category,setcategory] = useState('')
+    const[userId,setuserId] = useState('')
 
     const handleDateChange = (e) => {
         const selectedDate = e.target.value;
@@ -53,13 +54,7 @@ const Body = (props) => {
         }).then((res) => res.json())
         .then(data => {
             console.log("Data received:", data); 
-                console.log("Before reset:", { title, description, duedate, category }); 
-                settitle('');
-                setdescription('');
-                setduedate('');
-                setcategory('');
-                setupdate(prev => !prev);
-                console.log("After reset:", { title, description, duedate, category }); 
+                console.log( { title, description, duedate, category,userId }); 
             })
             .catch(error => {
                 console.error("Error:", error); 
