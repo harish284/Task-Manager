@@ -52,7 +52,7 @@ app.post('/taskmanager-create',async function(req,res){
 })
 
 //READ
-app.get('/taskmanager-get',async function(req,res){
+app.get('/taskmanager-get',verifyToken,async function(req,res){
     try{
         const taskdetails = await taskmanagermodel.find();
         res.status(200).json(taskdetails);
@@ -77,7 +77,7 @@ app.delete('/taskmanager-delete/:_id',async function(req,res){
 
 //Create-Account
 
-app.post("/signup",verifyToken,async (req,res) => {
+app.post("/signup",async (req,res) => {
     const { username, email, password } = req.body;
 
     if(!username || !email || !password){
