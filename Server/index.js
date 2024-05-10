@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const {taskmanagermodel} = require('./schema');
-const jwt = require('jsonwebtoken');
 const {LoginModel} = require('../Server/Model/usermodel');
-const bcrypt= require('bcrypt');
-const verifyToken = require('../Server/Middleware');
 
 
 const app = express();
@@ -42,8 +39,10 @@ app.post('/taskmanager-create',async function(req,res){
             "title" :req.body.title,
             "description" :req.body.description,
             "duedate" :req.body.duedate,
-            "category" :req.body.category
+            "category" :req.body.category,
+            user:userId 
         })
+        await taskmanagermodel.save();
         res.status(200).json({status : "success" , message : "Task created successfully"});
     }
     catch(error){
@@ -52,9 +51,10 @@ app.post('/taskmanager-create',async function(req,res){
 })
 
 //READ
-app.get('/taskmanager-get',async function(req,res){
+app.get('/taskmanager-get/:userId',async function(req,res){
     try{
-        const taskdetails = await taskmanagermodel.find();
+        const userId = req.params.userId;
+        const taskdetails = await taskmanagermodel.find({user:userId});
         res.status(200).json(taskdetails);
     }
     catch(error){
@@ -64,10 +64,10 @@ app.get('/taskmanager-get',async function(req,res){
 
 
 //DELETE
-app.delete('/taskmanager-delete/:_id',async function(req,res){
-    const id = req.params._id;
+app.delete('/taskmanager-delete/:id',async function(req,res){
+    const taskid = req.params.id;
     try{
-         await taskmanagermodel.findOne({_id: id});
+         await taskmanagermodel.findOne(taskid);
         res.status(200).json({status : "success" , message : "Task deleted successfully"});
     }
     catch(err){
@@ -75,8 +75,23 @@ app.delete('/taskmanager-delete/:_id',async function(req,res){
     }
 })
 
-//Create-Account
+//USER
+app.get('/getuser',async function(req,res){
+    try{
+      const userdata=await LoginModel.find();
+      res.status(200).json(userdata);
+    }
+    catch(error){
+      res.status(500).json({
+      "status":"failure",
+      "message":"couldn't fetch",
+      "error": error
+  })
+      }
+  })
 
+
+//Create-Account
 app.post("/signup",async (req,res) => {
     const { username, email, password } = req.body;
 
@@ -88,56 +103,43 @@ app.post("/signup",async (req,res) => {
         return res.status(400).send({ message: 'Password must be at least 6 characters' });
     }
 
-    const newUser = new LoginModel({ 
-        username,
-        email,
-        password : bcrypt.hashSync(password, 8)
-    });
-    
-    LoginModel.findOne({email}).then((data)=>{
-        if(data){
-            return res.status(400).send({ message: 'User already exists' });
+    LoginModel.findOne({ $or: [{ name: username }, { email: email }] })
+    .then(existingUser => {
+      if (existingUser) {
+        if (existingUser.email === email) {
+          res.status(400).json({ message: "Email already exists" }); 
+        } else {
+          res.status(400).json({ message: "Username already exists" });
         }
-        else{
-            newUser.save().then((user)=>{
-                res.send({message: 'User registered successfully'});
-            });
-        }
+      } else {
+        LoginModel.create({ username, email, password })
+          .then(user => {
+            res.status(201).json({ message: "User created successfully", userId: user._id });
+          })
+          .catch(err => res.status(500).json({ message: err.message })); 
+      }
     })
+    .catch(err => res.status(500).json({ message: err.message })); 
 });
 
 
 // login
 app.post("/login",async (req, res) => {
+    const {email, password} = req.body;
     try {
-        if(!req.body.email || !req.body.password){
-            return res.status(400).send({ message: 'All fields are required' });
+        const user = await LoginModel.findOne({ email,password });   
+        if (user) {
+            res.status(200).json({ 
+                id: user._id, 
+                name: user.name, 
+                email: user.email
+             });
+          } else {
+            res.status(401).json({
+                 message: "Incorrect username or password" 
+            });
+          }
+        } catch (error) {
+          res.status(500).json({ message: error.message });
         }
-        const {email, password} = req.body;
-        LoginModel.findOne({ email }).then((user) => {
-            if (!user) {
-                return res.status(404).send({ message: 'User not found' });
-            }
-
-            const validPassword = bcrypt.compareSync(password, user.password);
-
-            if (!validPassword) {
-                 res.status(401).send({ message: 'Invalid password' });
-            }
-           
-            let token = jwt.sign({ id: user._id}, "your_secret_key");
-            res.send({message: 'Login successful',
-            user:{
-                username: user.username,
-                email: user.email,
-                password: user.password
-            },
-            accessToken: token,
-        })
-        })
-        
-    } catch (error) {
-        res.status(500).json({ status: 'failed', message: 'Cannot login' });
-    }
-});
-
+    });
