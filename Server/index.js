@@ -8,20 +8,18 @@ const {LoginModel} = require('../Server/Model/usermodel');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({
-    origin : '*',
-}));
+app.use(cors());
 
 
 //connect to mongodb
 async function connecttodb(){
     try{
-        const url = ('mongodb+srv://vijay2304a:123@cluster0.99eceu8.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0')
+        const url = ('mongodb+srv://vijay:vijay2304@cluster0.zysdgwy.mongodb.net/taskmanagerdb?retryWrites=true&w=majority&appName=Cluster0')
         await mongoose.connect(url)
         console.log('connected to database successfully');
-        const port = process.env.PORT || 3000;
+        const port = process.env.PORT || 5000;
         app.listen(port,function(){
-            console.log('server started at 3000....');
+            console.log('server started at 5000....');
         })
     }
     catch(error){
@@ -33,25 +31,28 @@ connecttodb();
 
 
 //CREATE 
-app.post('/taskmanager-create',async function(req,res){
-    try{
-        await taskmanagermodel.create({
-            "title" :req.body.title,
-            "description" :req.body.description,
-            "duedate" :req.body.duedate,
-            "category" :req.body.category,
-            user:userId 
-        })
-        await taskmanagermodel.save();
-        res.status(200).json({status : "success" , message : "Task created successfully"});
+app.post('/taskmanagercreate', async function (req, res) {
+    try {
+        const { title, description, duedate, category, userId } = req.body;
+        if (!title || !duedate || !category || !userId) {
+            return res.status(400).json({ status: "failed", message: "All fields are required" });
+        }
+        const newTask = new taskmanagermodel({
+            title,
+            description,
+            duedate,
+            category,
+            user: userId
+        });
+        await newTask.save();
+        res.status(200).json({ status: "success", message: "Task created successfully" });
+    } catch (error) {
+        res.status(500).json({ status: "failed", message: "Cannot create task", error: error.message });
     }
-    catch(error){
-        res.status(400).json({status : "failed" , message : "cannot create task"});
-    }
-})
+});
 
 //READ
-app.get('/taskmanager-get/:userId',async function(req,res){
+app.get('/taskmanagerget/:userId',async function(req,res){
     try{
         const userId = req.params.userId;
         const taskdetails = await taskmanagermodel.find({user:userId});
@@ -64,10 +65,10 @@ app.get('/taskmanager-get/:userId',async function(req,res){
 
 
 //DELETE
-app.delete('/taskmanager-delete/:id',async function(req,res){
-    const taskid = req.params.id;
+app.delete('/taskmanagerdelete/:id',async function(req,res){
+    const taskId = req.params.id;
     try{
-         await taskmanagermodel.findOne(taskid);
+         await taskmanagermodel.findByIdAndDelete(taskId);
         res.status(200).json({status : "success" , message : "Task deleted successfully"});
     }
     catch(err){
@@ -93,17 +94,14 @@ app.get('/getuser',async function(req,res){
 
 //Create-Account
 app.post("/signup",async (req,res) => {
-    const { username, email, password } = req.body;
-
-    if(!username || !email || !password){
+    const { name, email, password } = req.body;
+    if(!name || !email || !password){
         return res.status(400).send({ message: 'All fields are required' });
     }
-
     if(password.length < 6){
         return res.status(400).send({ message: 'Password must be at least 6 characters' });
     }
-
-    LoginModel.findOne({ $or: [{ name: username }, { email: email }] })
+    LoginModel.findOne({ $or: [{ name: name }, { email: email }] })
     .then(existingUser => {
       if (existingUser) {
         if (existingUser.email === email) {
@@ -112,7 +110,7 @@ app.post("/signup",async (req,res) => {
           res.status(400).json({ message: "Username already exists" });
         }
       } else {
-        LoginModel.create({ username, email, password })
+        LoginModel.create({ name, email, password })
           .then(user => {
             res.status(201).json({ message: "User created successfully", userId: user._id });
           })
@@ -132,7 +130,8 @@ app.post("/login",async (req, res) => {
             res.status(200).json({ 
                 id: user._id, 
                 name: user.name, 
-                email: user.email
+                email: user.email,
+                message: "User logged in successfully"
              });
           } else {
             res.status(401).json({

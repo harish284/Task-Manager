@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: {
+    name: {
         type: String,
         required: true,
     },
@@ -15,5 +15,5 @@ const userSchema = new mongoose.Schema({
         required: true,
     }
 });
-const LoginModel = mongoose.model('taskmanager', userSchema);
+const LoginModel = mongoose.model('userdetails', userSchema);
 module.exports = {LoginModel}
