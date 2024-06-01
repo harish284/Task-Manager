@@ -2,27 +2,25 @@ import React,{useEffect,useState} from 'react'
 import Materialicon from 'material-icons-react'
 import Card from './Card'
 import Navbody from './Navbody'
+import axios from 'axios'
 
 const Body = (props) => {
-    const [update, setupdate] = useState(false)
+    const [task, setTasks] = useState([])
     const [list, setList] = useState([])
-    const[Count,setCount] = useState(0)
+    const[count,setCount] = useState(0)
+    const[update,setupdate] = useState(false)
+
 
     useEffect(() => {
-         fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-get`)
-        .then(res => res.json())
-        .then(data => {
-            const sortedtask = data.sort((a,b) => new Date(a.duedate) - new Date(b.duedate))
-            setList(sortedtask)
-            setCount(data.length)
-            })
-    },[update])
-
-    const[title,settitle] = useState('')
-    const[description,setdescription] = useState('')
-    const[duedate,setduedate] = useState('')
-    const[category,setcategory] = useState('')
-    const[userId,setuserId] = useState('')
+        const userId = sessionStorage.getItem('userId');        
+        fetch(`http://localhost:5000/taskmanagerget/${userId}`)
+       .then(res => res.json())
+       .then(data => {
+           const sortedtask = data.sort((a,b) => new Date(a.duedate) - new Date(b.duedate))
+           setList(sortedtask)
+           setCount(data.length)
+           })
+   },[update])
 
     const handleDateChange = (e) => {
         const selectedDate = e.target.value;
@@ -35,34 +33,44 @@ const Body = (props) => {
             setduedate(selectedDate);
         }
     }
+
+    const[title,settitle] = useState('')
+    const[description,setdescription] = useState('')
+    const[duedate,setduedate] = useState('')
+    const[category,setcategory] = useState('')
+
    
-
-    let count=0;
-    //ADD
     const add = (e) => {
-        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-create`,{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                title:title,
-                description:description,
-                duedate:duedate,
-                category:category 
-            })
-        }).then((res) => res.json())
-        .then(data => {
-            console.log("Data received:", data); 
-                console.log( { title, description, duedate, category,userId }); 
-            })
-            .catch(error => {
-                console.error("Error:", error); 
-            });
-    }   
-
-
-
+        e.preventDefault();
+        if (!title || !duedate || !category) {
+          window.alert('Please fill all the fields.');
+          return;
+        }
+    
+        const userId = sessionStorage.getItem('userId');
+        const taskData = {
+            title:title,
+            description:description,
+            duedate:duedate,
+            category:category,
+            userId: userId,
+        };
+        console.log(userId);
+        console.log(taskData);
+        axios.post("http://localhost:5000/taskmanagercreate", taskData)
+          .then(response => {
+            console.log(response.data);
+           settitle('');
+            setdescription('');
+            setduedate('');
+            setcategory('');
+            setupdate((prev)=>!prev)
+          })
+          .catch(error => {
+            console.error('Error adding task:', error);
+          });
+      };
+    
   return (
     <div>
         <div>

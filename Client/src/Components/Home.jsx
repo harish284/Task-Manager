@@ -10,7 +10,7 @@ const Home = () => {
        </div>
        <div className='h-screen flex justify-between m-2 items-center '>
           <div>
-            <img src={task} alt="img" srcset="" className='w-[2000px] h-[300px]' />
+            <img src={task} alt="img" srcet="" className='w-[2000px] h-[300px]' />
           </div>
           <div>
             <h1 className='text-2xl font-title text-violet-900 mt-8 ml-8'>Operations keeps the lights on, strategy provides a light at the end of the tunnel, but project management is the train engine that moves the organization forward...</h1>

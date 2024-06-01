@@ -1,36 +1,32 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-            if (response.ok) {
-                const res = await response.json(); 
-                localStorage.setItem('token', res.accessToken);  
-                console.log("welcome", res.message);
-                navigate("/body");
-            } else {
-                setError('Invalid email or password'); 
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            setError('Something went wrong. Please try again.'); 
-        }
-    }
+        try{
+            const response=await axios.post("http://localhost:5000/login", { email,password })
+             const userdata=response.data;
+             if(userdata&&userdata.id){
+               sessionStorage.setItem('userId',userdata.id);
+               navigate('/body')
+             }
+             else{
+               window.alert("Invalid username or password");
+             }
+           }
+           
+             catch(error){
+               console.error("error occured during login",error);
+               window.alert("Error occured during login. Please try again");
+             };
+         };
 
     return (
         <div className='flex  justify-center items-center h-screen bg-gradient-to-b from-white via-pink-300 to-blue-400'>

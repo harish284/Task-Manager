@@ -2,31 +2,26 @@ import React,{useState} from 'react'
 import Materialicon from 'material-icons-react'
 
 const Card = (props) => {
-    const {id,setupdate,update} = props
+    const {id,setupdate} = props
     const[deletecount,setdeletecount] = useState(0)
     
-    //DELETE REQUEST
-    const Delete=(e)=>{
-        console.log(id);
-        handledone(id);
-        setdeletecount(deletecount+1);
-        console.log(deletecount);
-    };
-
-    const handledone = (id) => {
-        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanager-delete/${id}`,{
-            method:'DELETE',
-        }).then(res => {
-            if(res.ok){
+    const Delete = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/taskmanagerdelete/${id}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
                 console.log('Task Deleted');
-                setdeletecount(prevCount => prevCount+1);
-                console.log(deletecount);
+                setdeletecount(prevCount => prevCount + 1);
+                console.log(deletecount + 1); // Log the next value of deletecount
                 setupdate(prev => !prev);
-        }else{
-            throw new Error('Something went wrong');
+            } else {
+                throw new Error('Something went wrong');
+            }
+        } catch (error) {
+            console.error(error.message);
         }
-    })
-    }
+    };
 
 
   return (

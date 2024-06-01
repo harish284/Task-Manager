@@ -4,31 +4,47 @@ import { GoogleLogin } from '@react-oauth/google'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import {jwtDecode} from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 const SignUp = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignup = async (e) => {
+    const handleSignup =  (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username:name, email, password })
-            });
-            const data = await response.json();
-            console.log("Data received:", data);
-            console.log("User created successfully");
-            navigate("/body");
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
+        console.log(name);
+        console.log(email);
+        console.log(password);
+        if (!name || !email || !password) {
+            alert('Please fill all the fields.');
+            return;
+          }
+          
+          axios.post("http://localhost:5000/signup", { name, email, password })
+        .then(result => {
+          console.log(result);
+          if (result.data.message === "Email already exists") {
+            window.alert("Email already exists. Please use another email.");
+          } else if (result.data.message === "Username already exists") {
+            window.alert("Username already exists. Please use another username.");
+          } else if (result.data.message === "User created successfully") {
+            sessionStorage.setItem('userId', result.data.userId);
+            console.log(result.data)
+            navigate('/body',{ state: { userId: result.data.userId } });
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          if (error.response && error.response.data && error.response.data.message) {
+            window.alert(error.response.data.message);
+          } else {
+            window.alert("Something went wrong. Please try again later.");
+          }
+        });
+      
+      
+      };
 
     return (
         <div className='flex justify-center items-center h-screen bg-gradient-to-b from-white via-pink-300 to-blue-400'>
