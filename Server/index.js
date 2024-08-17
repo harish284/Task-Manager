@@ -29,7 +29,7 @@ async function connecttodb(){
 connecttodb();
 
 const port = 5000; ;
-app.listen(function(){
+app.listen(port,() => {
     console.log(`server started at ${port}....`);
 })
 
