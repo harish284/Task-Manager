@@ -46,68 +46,57 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-white ">
-      <div className="flex flex-col items-center font-title">
-        <div className="flex flex-col items-center p-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg">
-          <h1 className="text-violet-900 font-semibold">Create Account</h1>
-          <div className="py-2">
-            <input
-              type="text"
-              placeholder="Username"
-              className="rounded-lg p-1 bg-slate-100"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+    <div className="flex justify-center items-center h-screen bg-[#080D18]">
+      <div className="w-full max-w-md p-6 bg-slate-600 rounded-lg shadow-lg">
+        <h1 className="text-2xl text-white font-bold text-center mb-6">Create Account</h1>
+        <form onSubmit={handleSignup} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full rounded-lg p-3 bg-slate-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            className="w-full rounded-lg p-3 bg-slate-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full rounded-lg p-3 bg-slate-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            className="w-full bg-yellow-400 text-violet-900 font-semibold rounded-lg p-3 mt-4 transition-colors duration-300 hover:bg-yellow-500"
+            type="submit"
+          >
+            Sign Up
+          </button>
+        </form>
+        <div className="text-center mt-4 text-white font-semibold">or</div>
+        <div className="flex justify-center mt-4">
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <GoogleLogin
+              onSuccess={(CredentialResponse) => {
+                const decode = jwtDecode(CredentialResponse?.credential);
+                console.log(decode);
+                console.log("Login success");
+                navigate("/body");
+              }}
+              onError={() => {
+                console.log("Login failed");
+              }}
             />
-          </div>
-          <div className="pb-2">
-            <input
-              type="text"
-              placeholder="Email"
-              className="rounded-lg p-1 bg-slate-100"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="pb-2">
-            <input
-              type="password"
-              placeholder="Password"
-              className="rounded-lg p-1 bg-slate-100"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col items-center font-semibold">
-            <button
-              className="bg-yellow-400 p-1 mt-2 rounded-lg text-violet-900 font-semibold"
-              type="submit"
-              onClick={handleSignup}
-            >
-              Sign Up
-            </button>
-            <h1>or</h1>
-          </div>
-          <div>
-            <GoogleOAuthProvider clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}>
-              <GoogleLogin
-                onSuccess={(CredentialResponse) => {
-                  const decode = jwtDecode(CredentialResponse?.credential);
-                  console.log(decode);
-                  console.log("login success");
-                  navigate("/body");
-                }}
-                onError={() => {
-                  console.log("loginfailed");
-                }}
-              ></GoogleLogin>
-            </GoogleOAuthProvider>
-          </div>
-          <div className="flex mt-1 text-violet-900 font-title font-semibold">
-            <h1>Already Have an Account?</h1>
-            <Link to="/login">
-              <h1 className="text-yellow-400">Login</h1>
-            </Link>
-          </div>
+          </GoogleOAuthProvider>
+        </div>
+        <div className="flex justify-center items-center mt-6 text-white font-semibold">
+          <span className="mr-2">Already have an account?</span>
+          <Link to="/login" className="text-yellow-400 hover:underline">Login</Link>
         </div>
       </div>
     </div>
