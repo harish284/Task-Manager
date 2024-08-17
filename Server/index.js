@@ -28,7 +28,7 @@ async function connecttodb(){
 }
 connecttodb();
 
-const port = process.env.PORT ;
+const port = process.env.PORT || 5000; ;
 app.listen(function(){
     console.log(`server started at ${port}....`);
 })
