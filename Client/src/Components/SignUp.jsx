@@ -88,7 +88,7 @@ const SignUp = () => {
             <h1>or</h1>
           </div>
           <div>
-            <GoogleOAuthProvider clientId="process.env.VITE_GOOGLE_CLIENT_ID">
+            <GoogleOAuthProvider clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}>
               <GoogleLogin
                 onSuccess={(CredentialResponse) => {
                   const decode = jwtDecode(CredentialResponse?.credential);
