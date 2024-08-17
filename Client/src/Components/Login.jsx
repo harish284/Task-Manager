@@ -11,7 +11,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try{
-            const response=await axios.post("http://localhost:5000/login", { email,password })
+            const response=await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, { email,password })
              const userdata=response.data;
              if(userdata&&userdata.id){
                sessionStorage.setItem('userId',userdata.id);
@@ -23,7 +23,6 @@ const Login = () => {
            }
            
              catch(error){
-               console.error("error occured during login",error);
                window.alert("Error occured during login. Please try again");
              };
          };

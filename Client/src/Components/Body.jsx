@@ -13,7 +13,7 @@ const Body = (props) => {
 
     useEffect(() => {
         const userId = sessionStorage.getItem('userId');        
-        fetch(`http://localhost:5000/taskmanagerget/${userId}`)
+        fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanagerget/${userId}`)
        .then(res => res.json())
        .then(data => {
            const sortedtask = data.sort((a,b) => new Date(a.duedate) - new Date(b.duedate))
@@ -55,11 +55,8 @@ const Body = (props) => {
             category:category,
             userId: userId,
         };
-        console.log(userId);
-        console.log(taskData);
-        axios.post("http://localhost:5000/taskmanagercreate", taskData)
+        axios.post(`${import.meta.env.VITE_SERVER_URL}/taskmanagercreate`, taskData)
           .then(response => {
-            console.log(response.data);
            settitle('');
             setdescription('');
             setduedate('');

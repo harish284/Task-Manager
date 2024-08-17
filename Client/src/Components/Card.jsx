@@ -7,13 +7,11 @@ const Card = (props) => {
     
     const Delete = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/taskmanagerdelete/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/taskmanagerdelete/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                console.log('Task Deleted');
                 setdeletecount(prevCount => prevCount + 1);
-                console.log(deletecount + 1); // Log the next value of deletecount
                 setupdate(prev => !prev);
             } else {
                 throw new Error('Something went wrong');
