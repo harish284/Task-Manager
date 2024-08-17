@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const {taskmanagermodel} = require('./schema');
 const {LoginModel} = require('../Server/Model/usermodel');
+require('dotenv').config()
 
 
 const app = express();
@@ -14,13 +15,14 @@ app.use(cors());
 //connect to mongodb
 async function connecttodb(){
     try{
-        const url = ('mongodb+srv://vijay:vijay2304@cluster0.zysdgwy.mongodb.net/taskmanagerdb?retryWrites=true&w=majority&appName=Cluster0')
-        await mongoose.connect(url)
+        const url = process.env.MONGODB_URL
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+
         console.log('connected to database successfully');
-        const port = process.env.PORT || 5000;
-        app.listen(port,function(){
-            console.log('server started at 5000....');
-        })
+        
     }
     catch(error){
         console.log("cannot connect to database");
@@ -28,6 +30,11 @@ async function connecttodb(){
     }
 }
 connecttodb();
+
+const port = process.env.PORT ;
+app.listen(function(){
+    console.log(`server started at ${port}....`);
+})
 
 
 //CREATE 
